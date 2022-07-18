@@ -1,0 +1,11 @@
+{
+  "name": "nycompost",
+  "version": "1.0.0",
+  "description": "API to find compost locations in NYC",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Jasmine Noor",
+  "license": "ISC"
+}
