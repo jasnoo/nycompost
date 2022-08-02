@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router()
-const Model = require('../models/siteModel')
+const Site = require('../models/siteModel')
 
 // Get all site 
 router.get('/find', async (req, res) => {
   try {
-    const data = await Model.find();
+    const data = await Site.find();
     res.json(data)
   }
   catch (error) {
@@ -15,7 +15,7 @@ router.get('/find', async (req, res) => {
 
 router.get('/find/:borough', async (req, res) => {
   try {
-    const data = await Model.find({ borough: req.params.borough }).exec();
+    const data = await Site.find({ borough: req.params.borough }).exec();
     res.json(data)
   }
   catch (error) {
