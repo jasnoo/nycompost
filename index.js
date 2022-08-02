@@ -9,11 +9,11 @@ mongoose.connect(DB_URI);
 const db = mongoose.connection
 
 db.on('error', (error) => {
-    console.log(error)
+  console.log(error)
 })
 
 db.once('connected', () => {
-    console.log('DB Connected');
+  console.log('DB Connected');
 })
 
 const app = express();
@@ -22,6 +22,6 @@ app.use(express.json());
 app.use('/api', routes)
 
 app.listen(3000, () => {
-    console.log(`Server started at port 3000`)
+  console.log(`Server started at port 3000`)
 })
 
