@@ -15,7 +15,7 @@ router.get('/find', async (req, res) => {
 
 router.get('/find/:borough', async (req, res) => {
     try {
-        const data = await Model.find({ borough: req.param.borough }).exec();
+        const data = await Model.find({ borough: req.params.borough }).exec();
         res.json(data)
     }
     catch (error) {
