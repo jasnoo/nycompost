@@ -3,12 +3,12 @@ const mongoose = require('mongoose')
 const siteSchema = new mongoose.Schema({
   borough: {
     required: true,
-    type: { String },
+    type: String,
+    enum: ['Bronx', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island'],
     trim: true
   },
   neighborhood: {
     type: String,
-    enum: ['Bronx', 'Brooklyn', 'Manhattan', 'Queens', 'Staten Island'],
     trim: true
   },
   location: {
