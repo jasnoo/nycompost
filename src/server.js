@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const helmet = require('helmet');
 const sitesRouter = require('./routes/sites');
+const mongoSanitize = require('express-mongo-sanitize');
 require('dotenv').config();
 
 const DB_URI = process.env.MONGO_URI
@@ -9,6 +11,8 @@ const PORT = process.env.PORT || 3000;
 // const NODE_ENV = process.env.NODE_ENV || 'development';
 
 const app = express();
+app.use(helmet())
+app.use(mongoSanitize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
