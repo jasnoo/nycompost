@@ -47,7 +47,7 @@ siteController.getSite = async (req, res, next) => {
 // updates specific site
 siteController.updateSite = async (req, res, next) => {
   try {
-    const site = await Site.findbyId(req.params.id)
+    const site = await Site.findById(req.params.id)
     if (!site) {
       res.status(404).json({ message: 'ID does not exist' })
     }
