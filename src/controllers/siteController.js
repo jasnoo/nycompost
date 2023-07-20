@@ -9,8 +9,8 @@ const siteController = {}
 // retrieves all sites
 siteController.getAllSites = async (req, res, next) => {
   try {
-    const data = await Site.find();
-    res.json(data)
+    const site = await Site.find();
+    res.json(site)
   }
   catch (error) {
     res.status(500).json({ message: error.message })
@@ -29,11 +29,12 @@ siteController.confirmValidId = async (req, res, next) => {
 // retrieves specific site
 siteController.getSite = async (req, res, next) => {
   try {
-    const data = await Site.findById(req.params.id);
+    console.log(req.params.id)
+    const site = await Site.findById(req.params.id);
     if (!site) {
       res.status(404).json({ message: 'ID does not exist' })
     } else {
-      res.json(data)
+      res.json(site)
     }
   }
   catch (error) {
@@ -51,8 +52,8 @@ siteController.updateSite = async (req, res, next) => {
       res.status(404).json({ message: 'ID does not exist' })
     }
     if (site.user_submitted) {
-      const data = await Site.findByIdAndUpdate(req.params.id, { ...req.body, user_submitted: true }, { new: true })
-      res.json(data)
+      const site = await Site.findByIdAndUpdate(req.params.id, { ...req.body, user_submitted: true }, { new: true })
+      res.json(site)
     }
     else {
       res.status(400).json({ message: 'Site is not user-submitted and cannot be changed' })
@@ -69,8 +70,8 @@ siteController.deleteSite = async (req, res, next) => {
   try {
     const site = await Site.findById(req.params.id)
     if (site.user_submitted) {
-      const data = await Site.findByIdAndRemove(req.params.id)
-      res.json(data)
+      const site = await Site.findByIdAndRemove(req.params.id)
+      res.json(site)
     }
     else {
       res.status(400).json({ message: 'Site is not user-submitted and cannot be changed' })
@@ -85,8 +86,8 @@ siteController.deleteSite = async (req, res, next) => {
 siteController.addSite = async (req, res, next) => {
   try {
     if (req.body.borough && req.body.location && req.body.address) {
-      const data = await Site.create({ ...req.body, user_submitted: true });
-      res.json(data)
+      const site = await Site.create({ ...req.body, user_submitted: true });
+      res.json(site)
     } else {
       res.status(400).json({ message: 'New compost sites require the borough, location, and address' })
     }
