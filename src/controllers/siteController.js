@@ -1,5 +1,3 @@
-
-
 const Site = require('../models/siteModel');
 const mongoose = require('mongoose');
 
