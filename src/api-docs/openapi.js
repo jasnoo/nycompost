@@ -121,7 +121,7 @@ module.exports = {
             "description": "Invalid ID supplied"
           },
           "404": {
-            "description": "Order not found"
+            "description": "ID not found"
           }
         }
       },
@@ -193,7 +193,7 @@ module.exports = {
             "description": "Invalid ID supplied"
           },
           "404": {
-            "description": "Order not found"
+            "description": "ID not found"
           }
         }
       },
