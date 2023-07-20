@@ -22,6 +22,58 @@ paths:
         - sites
       summary: Show all compost sites
       description: All compost sites will be shown (both user-submitted and non user-submitted)
+      parameters:
+        - name: borough
+          in: query
+          description: Borough to filter by
+          required: false
+          schema:
+            type: string
+        - name: neighborhood
+          in: query
+          description: neighborhood to filter by
+          required: false
+          schema:
+            type: string
+        - name: org
+          in: query
+          description: Organization to filter by
+          required: false
+          schema:
+            type: string
+            
+        - name: day_schedule
+          in: query
+          description: Schedule day to filter by (0 = Sunday, 1 = Monday, etc)
+          required: false
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+            maximum: 6
+        - name: month_schedule
+          in: query
+          description: Month day to filter by (0 = January, 1 = February, etc)
+          required: false
+          schema:
+            type: integer
+            format: int64
+            minimum: 0
+            maximum: 11
+        - name: accepts_meat
+          in: query
+          description: If site accepts meat, fish, dairy
+          required: false
+          schema:
+            type: boolean
+        - name: user_submitted
+          in: query
+          description: If site is a user_submitted site (true) or city submitted site (false)
+          required: false
+          schema:
+            type: boolean
+
+        
       responses:
         '200':
           description: successful operation
