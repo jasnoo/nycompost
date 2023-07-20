@@ -8,7 +8,26 @@ const siteController = {}
 siteController.getAllSites = async (req, res, next) => {
   try {
     const site = await Site.find();
-    res.json(site)
+
+    const userFilters = req.query;
+    const filteredResults = site.filter(x => {
+      let isValid = true
+      for (key in userFilters) {
+        if (key === 'day_schedule' || key === 'month_schedule') {
+          // handle functionality around filtering for a day or month
+          isValid = isValid && x[key].includes(userFilters[key])
+        } else if (key === 'accepts_meat' || key === 'user_submitted') {
+          isValid = (isValid && (userFilters[key].toLowerCase() === 'true') === x[key])
+
+        }
+        else {
+          isValid = (isValid && (x[key] === userFilters[key]))
+        }
+      }
+      return isValid;
+    });
+
+    res.json(filteredResults)
   }
   catch (error) {
     res.status(500).json({ message: error.message })
@@ -27,7 +46,6 @@ siteController.confirmValidId = async (req, res, next) => {
 // retrieves specific site
 siteController.getSite = async (req, res, next) => {
   try {
-    console.log(req.params.id)
     const site = await Site.findById(req.params.id);
     if (!site) {
       res.status(404).json({ message: 'ID does not exist' })
