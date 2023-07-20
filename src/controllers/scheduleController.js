@@ -1,4 +1,4 @@
-const scheduleController = {}
+scheduleController = {}
 
 scheduleController.confirmTime = {
     // based on user's current date/time, should pass along relevant details to determine available places
