@@ -25,11 +25,11 @@ const siteSchema = new mongoose.Schema({
     trim: true
   },
   day_schedule: {
-    type: [Number],
+    type: [{ type: Number, enum: [0, 1, 2, 3, 4, 5, 6] }],
     default: []
   },
   month_schedule: {
-    type: [Number],
+    type: [{ type: Number, enum: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] }],
     default: []
   },
   schedule_notes: {
