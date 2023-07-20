@@ -5,7 +5,16 @@ const helmet = require('helmet');
 const sitesRouter = require('./routes/sites');
 const mongoSanitize = require('express-mongo-sanitize');
 const swaggerUi = require('swagger-ui-express');
+const rateLimit = require('express-rate-limit')
 require('dotenv').config();
+
+
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 60 minutes
+  max: 50, // Limit each IP to 50 requests window
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
 
 const swaggerDoc = require('./api-docs/openapi')
 
@@ -15,6 +24,7 @@ const PORT = process.env.PORT || 3000;
 
 
 const app = express();
+app.use(limiter)
 app.use(helmet())
 app.use(mongoSanitize());
 app.use(express.json());
