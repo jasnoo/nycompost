@@ -38,28 +38,23 @@ describe("Site routes", () => {
         "address": "200 Spooky Creepy Ln",
       })
 
-      await request(app)
-        .get("/api/v1/sites")
-        .set("Accept", "application/json")
-        .expect("Content-Type", /json/)
-        .expect(200)
-        .then((response) => {
-          expect(Array.isArray(response.body)).toBeTruthy()
-          expect(response.body.length).toEqual(2)
-          expect(response.body[0].borough).toBe(site1.borough)
-          expect(response.body[0].neighborhood).toBe(site1.neighborhood)
-          expect(response.body[0].location).toBe(site1.location)
-          expect(response.body[0].address).toBe(site1.address)
-          expect(response.body[0].day_schedule).toStrictEqual(site1.day_schedule)
-          expect(response.body[0].month_schedule).toStrictEqual(site1.month_schedule)
-          expect(response.body[0].neighborhood).toBe(site1.neighborhood)
-          expect(response.body[0].org).toBe(site1.org)
-          expect(response.body[0].accepts_meat).toBe(site1.accepts_meat)
-          expect(response.body[0].user_submitted).toBe(true)
-          expect(response.body[1].borough).toBe(site2.borough)
-          expect(response.body[1].location).toBe(site2.location)
-          expect(response.body[1].user_submitted).toBe(true)
-        })
+      const response = await request(app).get("/api/v1/sites")
+      expect(Array.isArray(response.body)).toBeTruthy()
+      expect(response.body.length).toEqual(2)
+      expect(response.body[0].borough).toBe(site1.borough)
+      expect(response.body[0].neighborhood).toBe(site1.neighborhood)
+      expect(response.body[0].location).toBe(site1.location)
+      expect(response.body[0].address).toBe(site1.address)
+      expect(response.body[0].day_schedule).toStrictEqual(site1.day_schedule)
+      expect(response.body[0].month_schedule).toStrictEqual(site1.month_schedule)
+      expect(response.body[0].neighborhood).toBe(site1.neighborhood)
+      expect(response.body[0].org).toBe(site1.org)
+      expect(response.body[0].accepts_meat).toBe(site1.accepts_meat)
+      expect(response.body[0].user_submitted).toBe(true)
+      expect(response.body[1].borough).toBe(site2.borough)
+      expect(response.body[1].location).toBe(site2.location)
+      expect(response.body[1].user_submitted).toBe(true)
+
     });
   });
 
@@ -114,21 +109,18 @@ describe("Site routes", () => {
     });
   });
 
-
-  describe("PUT /api/v1/sites", () => {
+  describe("PUT /api/v1/sites/:id", () => {
     test("Should update a site", async () => {
       const site = {
         "borough": "Brooklyn",
         "location": "Spooky Garden",
         "address": "200 Spooky Creepy Ln",
       }
-
       const site2 = {
         "borough": "Queens",
         "location": "Spooky Garden",
         "address": "100 Spooky Creepy Ln",
       }
-
       const initialResponse = await request(app).post("/api/v1/sites").send(site);
       const id = initialResponse.body['_id']
       const response = await request(app).put(`/api/v1/sites/${id}`).send(site2);
@@ -140,95 +132,18 @@ describe("Site routes", () => {
     });
   });
 
-
-  describe("DELETE /api/v1/sites", () => {
+  describe("DELETE /api/v1/sites/:id", () => {
     test("Should delete a site", async () => {
       const site = {
         "borough": "Brooklyn",
         "location": "Spooky Garden",
         "address": "200 Spooky Creepy Ln",
       }
-
       const initialResponse = await request(app).post("/api/v1/sites").send(site);
       const id = initialResponse.body['_id']
       const response = await request(app).delete(`/api/v1/sites/${id}`);
       expect(response.statusCode).toBe(200);
-
-
     });
   });
-
-
-  // describe("PUT /api/products/:id", async () => {
-
-  //   const site2 = await Site.create({
-  //     "borough": "Brooklyn",
-  //     "address": "200 Spooky Creepy Ln",
-  //   })
-
-  //   const response = await request(app)
-  //     .get("/api/v1/sites")
-  //     .set("Accept", "application/json")
-  //     .expect("Content-Type", /json/)
-  //     .expect(200)
-
-  //   it("should update a product", async () => {
-  //     const res = await request(app)
-  //       .patch("/api/products/6331abc9e9ececcc2d449e44")
-  //       .send({
-  //         name: "Product 4",
-  //         price: 104,
-  //         description: "Description 4",
-  //       });
-  //     expect(res.statusCode).toBe(200);
-  //     expect(res.body.price).toBe(104);
-  //   });
-  // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // });
-
-
-
-  //     // beforeAll(async (done) => {
-  //     //     await mongoose.connect('mongodb://localhost:27017/NYCompost');
-  //     //     server = app.listen(4000, () => {
-  //     //         global.agent = request.agent(server);
-  //     //         done();
-  //     //     });
-  //     // });
-
-
-  //     // afterAll(async () => {
-  //     //     await server.close()
-  //     //     await app.close()
-  //     //     // Close the server instance after each test
-  //     //     await mongoose.disconnect();
-  //     //     await new Promise(resolve => setTimeout(() => resolve(), 500)); // avoid jest open handle error
-  //     // });
-
-  //     // test("It should response the GET method", async () => {
-  //     //     const response = await request(app).get("/api/v1/sites")
-  //     //     expect(response.statusCode).toBe(200)
-  //     //         .end(done)
-
-  //     // });
-
 
 });
