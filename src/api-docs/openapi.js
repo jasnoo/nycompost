@@ -143,7 +143,7 @@ module.exports = {
           "required": true
         },
         "responses": {
-          "200": {
+          "201": {
             "description": "Successful operation",
             "content": {
               "application/json": {

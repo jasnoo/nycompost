@@ -103,7 +103,7 @@ siteController.addSite = async (req, res, next) => {
   try {
     if (req.body.borough && req.body.location && req.body.address) {
       const site = await Site.create({ ...req.body, user_submitted: true });
-      res.json(site)
+      res.status(201).json(site)
     } else {
       res.status(400).json({ message: 'New compost sites require the borough, location, and address' })
     }
