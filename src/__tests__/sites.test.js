@@ -5,36 +5,18 @@ const mongoose = require('mongoose');
 
 
 describe("Site routes", () => {
-  // // beforeEach(async () => {
-  // //   await mongoose.connect('mongodb://localhost:27017/NYCompost');
-  // // });
-
-  // /* Closing database connection after each test. */
-
 
   afterAll(async () => {
-    await Site.deleteMany()
     await mongoose.connection.close();
   })
 
-
-
-  // beforeAll(async () => {
-  //   // await mongoose.connection.close();
-  //   const url = `mongodb://127.0.0.1/NYCompostTest`
-  //   await mongoose.connect(url, { useNewUrlParser: true })
-  // })
-
-  // afterEach(async () => {
-  //   await User.deleteMany()
-  // })
-
+  afterEach(async () => {
+    await Site.deleteMany()
+  })
 
   describe("GET /api/v1/sites", () => {
 
-
-
-    test("should get all sites", async () => {
+    test("should fetch all sites", async () => {
       const site1 = await Site.create({
         "borough": "Manhattan",
         "neighborhood": "Chelsea",
@@ -56,8 +38,6 @@ describe("Site routes", () => {
         "address": "200 Spooky Creepy Ln",
       })
 
-
-
       await request(app)
         .get("/api/v1/sites")
         .set("Accept", "application/json")
@@ -66,22 +46,161 @@ describe("Site routes", () => {
         .then((response) => {
           expect(Array.isArray(response.body)).toBeTruthy()
           expect(response.body.length).toEqual(2)
-          expect(response.body[0]).toEqual(site1)
           expect(response.body[0].borough).toBe(site1.borough)
           expect(response.body[0].neighborhood).toBe(site1.neighborhood)
           expect(response.body[0].location).toBe(site1.location)
           expect(response.body[0].address).toBe(site1.address)
+          expect(response.body[0].day_schedule).toStrictEqual(site1.day_schedule)
+          expect(response.body[0].month_schedule).toStrictEqual(site1.month_schedule)
           expect(response.body[0].neighborhood).toBe(site1.neighborhood)
           expect(response.body[0].org).toBe(site1.org)
           expect(response.body[0].accepts_meat).toBe(site1.accepts_meat)
           expect(response.body[0].user_submitted).toBe(true)
           expect(response.body[1].borough).toBe(site2.borough)
           expect(response.body[1].location).toBe(site2.location)
-
-
+          expect(response.body[1].user_submitted).toBe(true)
         })
     });
   });
+
+  describe("GET /api/v1/sites/:id", () => {
+    test("Should get a site by ID", async () => {
+      const site = {
+        "borough": "Brooklyn",
+        "location": "Spooky Garden",
+        "address": "200 Spooky Creepy Ln",
+      }
+      const initialResponse = await request(app).post("/api/v1/sites").send(site);
+      const id = initialResponse.body['_id']
+      const response = await request(app).get(`/api/v1/sites/${id}`)
+      expect(response.statusCode).toBe(200);
+      expect(response.body.borough).toBe(site.borough)
+      expect(response.body.location).toBe(site.location)
+      expect(response.body.address).toBe(site.address)
+      expect(response.body.user_submitted).toBe(true)
+
+    });
+  });
+
+  describe("POST /api/v1/sites", () => {
+    test("should create a new site", async () => {
+      const site = {
+        "borough": "Queens",
+        "neighborhood": "LIC",
+        "location": "Queens Community Garden",
+        "address": "200 Location Pl",
+        "org": "Garden Collective",
+        "day_schedule": [
+          1
+        ],
+        "month_schedule": [
+          0, 1
+        ],
+        "accepts_meat": true,
+        "user_submitted": false
+      }
+      const response = await request(app).post("/api/v1/sites").send(site);
+      expect(response.statusCode).toBe(201);
+      expect(response.body.borough).toBe(site.borough)
+      expect(response.body.neighborhood).toBe(site.neighborhood)
+      expect(response.body.location).toBe(site.location)
+      expect(response.body.address).toBe(site.address)
+      expect(response.body.day_schedule).toStrictEqual(site.day_schedule)
+      expect(response.body.month_schedule).toStrictEqual(site.month_schedule)
+      expect(response.body.neighborhood).toBe(site.neighborhood)
+      expect(response.body.org).toBe(site.org)
+      expect(response.body.accepts_meat).toBe(site.accepts_meat)
+      expect(response.body.user_submitted).toBe(true)
+    });
+  });
+
+
+  describe("PUT /api/v1/sites", () => {
+    test("Should update a site", async () => {
+      const site = {
+        "borough": "Brooklyn",
+        "location": "Spooky Garden",
+        "address": "200 Spooky Creepy Ln",
+      }
+
+      const site2 = {
+        "borough": "Queens",
+        "location": "Spooky Garden",
+        "address": "100 Spooky Creepy Ln",
+      }
+
+      const initialResponse = await request(app).post("/api/v1/sites").send(site);
+      const id = initialResponse.body['_id']
+      const response = await request(app).put(`/api/v1/sites/${id}`).send(site2);
+      expect(response.statusCode).toBe(200);
+      expect(response.body.borough).toBe(site2.borough)
+      expect(response.body.address).toBe(site2.address)
+      expect(response.body.user_submitted).toBe(true)
+
+    });
+  });
+
+
+  describe("DELETE /api/v1/sites", () => {
+    test("Should delete a site", async () => {
+      const site = {
+        "borough": "Brooklyn",
+        "location": "Spooky Garden",
+        "address": "200 Spooky Creepy Ln",
+      }
+
+      const initialResponse = await request(app).post("/api/v1/sites").send(site);
+      const id = initialResponse.body['_id']
+      const response = await request(app).delete(`/api/v1/sites/${id}`);
+      expect(response.statusCode).toBe(200);
+
+
+    });
+  });
+
+
+  // describe("PUT /api/products/:id", async () => {
+
+  //   const site2 = await Site.create({
+  //     "borough": "Brooklyn",
+  //     "address": "200 Spooky Creepy Ln",
+  //   })
+
+  //   const response = await request(app)
+  //     .get("/api/v1/sites")
+  //     .set("Accept", "application/json")
+  //     .expect("Content-Type", /json/)
+  //     .expect(200)
+
+  //   it("should update a product", async () => {
+  //     const res = await request(app)
+  //       .patch("/api/products/6331abc9e9ececcc2d449e44")
+  //       .send({
+  //         name: "Product 4",
+  //         price: 104,
+  //         description: "Description 4",
+  //       });
+  //     expect(res.statusCode).toBe(200);
+  //     expect(res.body.price).toBe(104);
+  //   });
+  // });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   // });
 
