@@ -1,4 +1,8 @@
+
+
 const Site = require('../models/siteModel');
+const mongoose = require('mongoose');
+
 
 const siteController = {}
 
@@ -13,27 +17,45 @@ siteController.getAllSites = async (req, res, next) => {
   }
 }
 
+// confirms site ID is a valid mongo ID
+siteController.confirmValidId = async (req, res, next) => {
+  if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+    res.status(404).json({ message: 'ID does not exist' })
+  } else {
+    next();
+  }
+}
+
 // retrieves specific site
 siteController.getSite = async (req, res, next) => {
   try {
     const data = await Site.findById(req.params.id);
-    res.json(data)
+    if (!site) {
+      res.status(404).json({ message: 'ID does not exist' })
+    } else {
+      res.json(data)
+    }
   }
   catch (error) {
     res.status(500).json({ message: error.message })
   }
 }
 
+
+
 // updates specific site
 siteController.updateSite = async (req, res, next) => {
   try {
-    const site = await Site.findById(req.params.id)
+    const site = await Site.findbyId(req.params.id)
+    if (!site) {
+      res.status(404).json({ message: 'ID does not exist' })
+    }
     if (site.user_submitted) {
       const data = await Site.findByIdAndUpdate(req.params.id, { ...req.body, user_submitted: true }, { new: true })
       res.json(data)
     }
     else {
-      res.status(500).json({ message: 'Site is not user-submitted and cannot be changed' })
+      res.status(400).json({ message: 'Site is not user-submitted and cannot be changed' })
     }
 
   }
@@ -51,7 +73,7 @@ siteController.deleteSite = async (req, res, next) => {
       res.json(data)
     }
     else {
-      res.status(500).json({ message: 'Site is not user-submitted and cannot be changed' })
+      res.status(400).json({ message: 'Site is not user-submitted and cannot be changed' })
     }
 
   }
@@ -61,31 +83,20 @@ siteController.deleteSite = async (req, res, next) => {
 }
 
 siteController.addSite = async (req, res, next) => {
-  // adds new site
-  try {
-    const data = await Site.create({ ...req.body, user_submitted: true });
-    res.json(data)
+  if (req.body.borough && req.body.location && req.body.address) {
+    try {
+      const data = await Site.create({ ...req.body, user_submitted: true });
+      res.json(data)
+    }
+    catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  } else {
+    res.status(400).json({ message: 'New compost sites require the borough, location, and address' })
   }
-  catch (error) {
-    res.status(500).json({ message: error.message })
-  }
-
 }
 
 
-
-
-siteController.update = {
-  // update user-added site
-}
-
-siteController.getAll = {
-  // get all current sites 
-}
-
-siteController.get = {
-  // should provide functionality to filter by Borough, currently open (month/day), can dispose meat,
-}
 
 
 module.exports = siteController
