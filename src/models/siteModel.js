@@ -12,7 +12,6 @@ const siteSchema = new mongoose.Schema({
     trim: true
   },
   location: {
-    required: true,
     type: String,
     trim: true
   },
@@ -50,6 +49,6 @@ const siteSchema = new mongoose.Schema({
   }
 
 
-})
+}, { versionKey: false })
 
 module.exports = mongoose.model('Site', siteSchema)
