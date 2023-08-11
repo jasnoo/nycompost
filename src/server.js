@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const sitesRouter = require('./routes/v1/sites');
+const sitesRouter = require('./routes/sites');
 require('dotenv').config();
 
 const DB_URI = process.env.MONGO_URI
