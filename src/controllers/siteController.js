@@ -83,16 +83,16 @@ siteController.deleteSite = async (req, res, next) => {
 }
 
 siteController.addSite = async (req, res, next) => {
-  if (req.body.borough && req.body.location && req.body.address) {
-    try {
+  try {
+    if (req.body.borough && req.body.location && req.body.address) {
       const data = await Site.create({ ...req.body, user_submitted: true });
       res.json(data)
+    } else {
+      res.status(400).json({ message: 'New compost sites require the borough, location, and address' })
     }
-    catch (error) {
-      res.status(500).json({ message: error.message })
-    }
-  } else {
-    res.status(400).json({ message: 'New compost sites require the borough, location, and address' })
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message })
   }
 }
 
