@@ -72,7 +72,7 @@ siteController.updateSite = async (req, res, next) => {
       res.json(site)
     }
     else {
-      res.status(400).json({ message: 'Site is not user-submitted and cannot be changed' })
+      res.status(403).json({ message: 'Site is not user-submitted and cannot be changed' })
     }
 
   }
@@ -90,7 +90,7 @@ siteController.deleteSite = async (req, res, next) => {
       res.json(site)
     }
     else {
-      res.status(400).json({ message: 'Site is not user-submitted and cannot be changed' })
+      res.status(403).json({ message: 'Site is not user-submitted and cannot be changed' })
     }
 
   }
