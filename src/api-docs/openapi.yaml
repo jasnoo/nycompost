@@ -164,6 +164,8 @@ paths:
           description: Invalid ID
         '404':
           description: Site not found
+        '403':
+          description: Site cannot be updated
         '405':
           description: Validation exception
     delete:
